@@ -1,0 +1,24 @@
+name: iOS CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build App
+        run: |
+          xcodebuild clean build \
+          -project PlayCam.xcodeproj \
+          -scheme PlayCam \
+          -destination 'platform=iOS Simulator,name=iPhone 15'
