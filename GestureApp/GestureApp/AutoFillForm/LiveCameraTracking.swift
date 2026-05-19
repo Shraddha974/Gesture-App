@@ -106,6 +106,8 @@ struct LiveCameraTextScanner: UIViewControllerRepresentable {
                 
             }
             
+            
+            
             request.recognitionLevel = .accurate
             request.usesLanguageCorrection = true
             request.minimumTextHeight = 0.05
