@@ -24,8 +24,12 @@ struct OnboardingView: View {
                 welcomeScreen
                     .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             } else {
-                onboardingCarousel
-                    .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                if #available(iOS 26.0, *) {
+                    onboardingCarousel
+                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                } else {
+                    // Fallback on earlier versions
+                }
             }
         }
         .animation(.easeInOut(duration: 0.3), value: showingWelcome)
@@ -88,6 +92,7 @@ struct OnboardingView: View {
     }
 
     
+    @available(iOS 26.0, *)
     private var onboardingCarousel: some View {
         VStack(spacing: 0) {
             // Progress indicator
@@ -175,10 +180,14 @@ struct OnboardingView: View {
     private var chatModesPage: some View {
         VStack(spacing: 32) {
             VStack(spacing: 16) {
-                Image(systemName: "message.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.blue)
-                    .glassEffect(.regular)
+                if #available(iOS 26.0, *) {
+                    Image(systemName: "message.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.blue)
+                        .glassEffect(.regular)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
                 Text("Three Modes")
                     .font(.title)
@@ -230,10 +239,14 @@ struct OnboardingView: View {
     private var voiceFeaturesPage: some View {
         VStack(spacing: 32) {
             VStack(spacing: 16) {
-                Image(systemName: "waveform.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.purple)
-                    .glassEffect(.regular)
+                if #available(iOS 26.0, *) {
+                    Image(systemName: "waveform.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.purple)
+                        .glassEffect(.regular)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
                 Text("Voice Interaction")
                     .font(.title)
@@ -278,10 +291,14 @@ struct OnboardingView: View {
     private var documentUploadPage: some View {
         VStack(spacing: 32) {
             VStack(spacing: 16) {
-                Image(systemName: "doc.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.green)
-                    .glassEffect(.regular)
+                if #available(iOS 26.0, *) {
+                    Image(systemName: "doc.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.green)
+                        .glassEffect(.regular)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
                 Text("Gesture Processing")
                     .font(.title)
@@ -326,10 +343,14 @@ struct OnboardingView: View {
     private var webSearchPage: some View {
         VStack(spacing: 32) {
             VStack(spacing: 16) {
-                Image(systemName: "text.badge.checkmark")
-                    .font(.system(size: 60))
-                    .foregroundColor(.orange)
-                    .glassEffect(.regular)
+                if #available(iOS 26.0, *) {
+                    Image(systemName: "text.badge.checkmark")
+                        .font(.system(size: 60))
+                        .foregroundColor(.orange)
+                        .glassEffect(.regular)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
                 Text("Smart Autofill Integration")
                     .font(.title)
@@ -374,10 +395,14 @@ struct OnboardingView: View {
     private var settingsPage: some View {
         VStack(spacing: 32) {
             VStack(spacing: 16) {
-                Image(systemName: "camera.viewfinder")
-                    .font(.system(size: 60))
-                    .foregroundColor(.gray)
-                    .glassEffect(.regular)
+                if #available(iOS 26.0, *) {
+                    Image(systemName: "camera.viewfinder")
+                        .font(.system(size: 60))
+                        .foregroundColor(.gray)
+                        .glassEffect(.regular)
+                } else {
+                    // Fallback on earlier versions
+                }
                 
                 Text("Magic Mirror")
                     .font(.title)
@@ -433,35 +458,39 @@ struct FeatureRow: View {
     let color: Color
     
     var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(.white)
-                .frame(width: 44, height: 44)
-                .background(color)
-                .clipShape(Circle())
-                .glassEffect(.regular)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
+        if #available(iOS 26.0, *) {
+            HStack(spacing: 16) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .frame(width: 44, height: 44)
+                    .background(color)
+                    .clipShape(Circle())
+                    .glassEffect(.regular)
                 
-                Text(description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.leading)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    Text(description)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 12.0))
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemGray6).opacity(0.5))
+            )
+        } else {
+            // Fallback on earlier versions
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 12.0))
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray6).opacity(0.5))
-        )
     }
 }
 
