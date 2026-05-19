@@ -1,0 +1,35 @@
+name: iOS CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+
+    runs-on: macos-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Show Xcode Version
+        run: xcodebuild -version
+
+      - name: Build App
+        run: |
+          xcodebuild clean build \
+          -project Gesture-App.xcodeproj \
+          -scheme Gesture-App \
+          -destination 'platform=iOS Simulator,name=iPhone 15'
